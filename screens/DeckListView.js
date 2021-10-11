@@ -1,22 +1,30 @@
 import React,{useEffect, useState} from 'react';
 import { Text, View, StyleSheet} from 'react-native';
-import {getDecks} from '../utils/helpers';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import {useDeckContext} from '../context/deckContext';    
 
 
-const DeckListView = () => {
+const DeckListView = ({navigation}) => {
 
-    const [decks, setDecks] = useState({})
-
-    useEffect(()=>{       
-        getDecks()
-        .then(data=>setDecks(data))  
-    },[])
-
+    const {decks} = useDeckContext();
 
     return (
         <View style={styles.container}>
           {
-            decks && Object.keys(decks).map(deck=> <Text key={deck}> {decks[deck].title} </Text>)
+            decks && Object.keys(decks).map(deck=> {
+
+                return (
+                    <TouchableOpacity
+                        style={styles.deck}
+                        onPress={()=>navigation.navigate("deck",{screen:"Deck",params:{id:deck}})}
+                        key={deck}
+                    > 
+                        <Text>{decks[deck].title} </Text>
+
+                    </TouchableOpacity>
+                )
+
+            })
           }
         </View>
     );
@@ -33,5 +41,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    deck:{
+        height: 50,
+        width: "100%",
+        paddingHorizontal:20,
+        paddingVertical:10,
+        marginBottom:20,
+        borderBottomWidth: 1,
     }
 });
