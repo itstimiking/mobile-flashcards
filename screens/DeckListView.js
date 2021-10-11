@@ -9,19 +9,6 @@ const DeckListView = ({navigation}) => {
     const {decks} = useDeckContext();
     const decksArray = Object.entries(decks);
 
-    const fadeAnim = useRef(new Animated.Value(0)).current;
-
-    useEffect(() => {
-        Animated.timing(
-          fadeAnim,
-          {
-            toValue: 1,
-            duration: 500,
-            useNativeDriver:true
-          }
-        ).start();
-    }, [fadeAnim])
-
     const goToDeck = (deck) =>{
         navigation.navigate("deck",{screen:"Deck",params:{id:deck[0]}})
     }
@@ -33,11 +20,11 @@ const DeckListView = ({navigation}) => {
                 onPress={()=>goToDeck(deck)}
                 key={deck[0]}
             > 
-                <Animated.Text
-                    style={[styles.deck, {opacity: fadeAnim}]}
+                <Text
+                    style={styles.deck}
                 >
                     {deck[1].title} 
-                </Animated.Text>
+                </Text>
     
             </TouchableOpacity>
         )
