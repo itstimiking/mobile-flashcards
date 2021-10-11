@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MOBILE_FLASHCARDS_DECK_KEY = "udacityMobileFitnessAppByTimi";
 
-const initialState = {
+export const initialState = {
     React: {
       title: 'React',
       questions: [
