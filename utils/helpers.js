@@ -1,80 +1,77 @@
-import React from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React from "react";
+import * as Permissions from 'expo-permissions';
+import * as Notifications from 'expo-notifications';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const MOBILE_FLASHCARDS_DECK_KEY = "udacityMobileFitnessAppByTimi";
+
+const NOTIFICATION_KEY_MOBILE_FLASHCARD =
+    "myMobileFlashcardNotificationKey:notifications";
 
 export const initialState = {
     React: {
-      title: 'React',
-      questions: [
-        {
-          question: 'What is React?',
-          answer: 'A library for managing user interfaces'
-        },
-        {
-          question: 'Where do you make Ajax requests in React?',
-          answer: 'The componentDidMount lifecycle event'
-        }
-      ]
+        title: "React",
+        questions: [
+            {
+                question: "What is React?",
+                answer: "A library for managing user interfaces",
+            },
+            {
+                question: "Where do you make Ajax requests in React?",
+                answer: "The componentDidMount lifecycle event",
+            },
+        ],
     },
     JavaScript: {
-      title: 'JavaScript',
-      questions: [
-        {
-          question: 'What is a closure?',
-          answer: 'The combination of a function and the lexical environment within which that function was declared.'
-        }
-      ]
-    }
-  }
+        title: "JavaScript",
+        questions: [
+            {
+                question: "What is a closure?",
+                answer: "The combination of a function and the lexical environment within which that function was declared.",
+            },
+        ],
+    },
+};
 
+export const clearLocalNotifications = () => {
+    return AsyncStorage.removeItem(NOTIFICATION_KEY_MOBILE_FLASHCARD).then(
+        Notifications.cancelAllScheduledNotificationsAsync
+    );
+};
 
+export const setLocalNotification = () => {
+    AsyncStorage.getItem(NOTIFICATION_KEY_MOBILE_FLASHCARD)
+        .then(JSON.parse)
+        .then((data) => {
+            if (data === null) {
+                Permissions.askAsync(Permissions.NOTIFICATIONS).then(
+                    (status) => {
+                        if (status === "granted") {
+                            Notifications.cancelAllScheduledNotificationsAsync();
 
-export const getDecks = async () => {
+                            let tomorrow = new Date();
+                            tomorrow.setDate(tomorrow.getDate() + 1);
+                            tomorrow.setHours(7);
+                            tomorrow.setMinutes(0);
 
-    const data = await AsyncStorage.getItem(MOBILE_FLASHCARDS_DECK_KEY)
-    
-    if(data !== null){
-        return JSON.parse(data);
-    }else{
-        await AsyncStorage.setItem(MOBILE_FLASHCARDS_DECK_KEY, JSON.stringify(initialState))
-        return initialState;
-    }
-}
+                            Notifications.scheduleNotificationAsync({
+                                content: {
+                                    title: "Mobile flashcards app",
+                                    body: " Dont forget to practice for your upcomming test today",
+                                },
+                                trigger: {
+                                    seconds: tomorrow,
+                                    repeats: true,
+                                },
+                            });
 
-export const getDeck = (id) => {
-
-    const deck = {}
-
-    AsyncStorage.mergeItem(packageKey, deck)
-    .then(data => JSON.parse(data))
-    .then(res=> deck = res[id])
-    .catch(err=>alert(err))
-
-    return deck
-}
-
-
-export const saveDeckTitle = (title) => {
-
-    AsyncStorage.mergeItem(MOBILE_FLASHCARDS_DECK_KEY, JSON.stringify({[title]:{}}) )
-    .then(data => console.log(data))
-    .catch(err=>alert(err))
-
-    console.log(title)
-}
-
-
-/*** addCardToDeck: take in two arguments, title and card, 
- * and will add the card to the list of 
- * questions for the deck with the associated title.
- * 
- */
-
- export const addCardToDeck = (title,card) => {
-
-    AsyncStorage.getItem(packageKey, deck)
-    .then(data => JSON.parse(data))
-    .then(res=> deck = res[id])
-    .catch(err=>alert(err))
-}
+                            AsyncStorage.setItem(
+                                NOTIFICATION_KEY_MOBILE_FLASHCARD,
+                                JSON.stringify(true)
+                            );
+                        }
+                    }
+                );
+            }
+        })
+        .catch(err=>console.log(err))
+};

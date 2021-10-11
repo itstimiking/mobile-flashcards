@@ -26,7 +26,7 @@ const NewDeck = ({navigation}) => {
             })
             setDeck("")
             Alert.alert("Success", "Deck added successfully")
-            navigation.navigate("Decks List")
+            navigation.navigate("deck", {screen: "Deck", params:{id:deck}})
         }else{
             Alert.alert("Warning","Please insert a deck name first")
         }
@@ -34,7 +34,7 @@ const NewDeck = ({navigation}) => {
 
     return (
         <KeyboardAvoidingView style={styles.container}>
-            <Text style={styles.text}>Enter Name for New Deck</Text>
+            <Text style={styles.text}>What is the title of your new deck?</Text>
             
             <TextInput
                 style={styles.input}
@@ -44,7 +44,7 @@ const NewDeck = ({navigation}) => {
             <TouchableOpacity
                 onPress={addDeck}
             >
-                <Text style={styles.btn}>Add Deck</Text>
+                <Text style={styles.btn}>Create Deck</Text>
             </TouchableOpacity>
         </KeyboardAvoidingView>
     )

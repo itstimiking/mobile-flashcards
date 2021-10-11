@@ -5,7 +5,10 @@
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "android":{
+      "useNextNotificationsApi": true
+    }
   },
   "name": "mobile-flashcards"
 }

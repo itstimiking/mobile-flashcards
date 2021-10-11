@@ -8,20 +8,18 @@ const DeckView = ({route,navigation}) => {
     const {id} = route.params;
     const {decks} = useDeckContext();
 
-    const [deck, setDeck] = useState();
-
-    useEffect(()=>{
-        setDeck(decks[id])
-    },[])
+    const deck = decks[id];
 
     return (
         <View style={styles.container}>
             {deck?.title && (
                 <View>
-                    <Text style={styles.deckName}>Deck Name: { deck.title } </Text>
-                    <Text style={styles.deckDetails}> 
-                        This deck has { deck.questions.length } cards.
-                    </Text>
+                    <View style={{alignItems:"center"}}>
+                        <Text style={styles.deckName}>{ deck.title } </Text>
+                        <Text style={styles.deckDetails}> 
+                            { `${deck.questions.length} card${!(deck.questions.length === 1) ? "s" : ""}.` }
+                        </Text>
+                    </View>
 
                     <View style={styles.btnView}>
                         <TouchableOpacity 

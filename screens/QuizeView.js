@@ -3,7 +3,8 @@ import { Text, View, StyleSheet } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const QuizeView = ({
-    route
+    route,
+    navigation
 }) => {
 
     const {title,questions} = route.params;
@@ -34,11 +35,32 @@ const QuizeView = ({
                         : <Text> {questions[answered].answer}</Text>
                     )
                     : (
-                        <Text>
+                        <View>
                             <Text> Total Score {answered} </Text>
                             <Text> Got {correct} correctly </Text>
                             <Text> Failed {failed} </Text>
-                        </Text>
+
+                            <View style={styles.finished}>
+                                <TouchableOpacity
+                                    onPress={()=>{
+                                        setCorrect(0)
+                                        setFailed(0)
+                                    }}
+                                >
+                                    <Text style={{...styles.viewAnswerBtn, backgroundColor:"green"}}> 
+                                        Restart Quize 
+                                    </Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    onPress={()=>navigation.goBack()}
+                                >
+                                    <Text style={{...styles.viewAnswerBtn, backgroundColor:"red"}}> 
+                                        Back to Deck
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
                     )
                 }
                 
@@ -50,7 +72,7 @@ const QuizeView = ({
                         onPress={()=>setViewAnswer(!viewAnswer)}
                     >
                         <Text style={styles.viewAnswerBtn}>
-                            View {!viewAnswer ? "Answer" : "Question"}
+                         {!viewAnswer ? "Show Answer" : "Question"}
                         </Text>
                     </TouchableOpacity>
                 )
@@ -71,7 +93,7 @@ const QuizeView = ({
                             onPress={()=>setFailed(failed + 1)}
                         >
                             <Text style={{...styles.viewAnswerBtn, backgroundColor:"red"}}> 
-                                Failed 
+                                Incorrect
                             </Text>
                         </TouchableOpacity>
                     </View>
@@ -107,8 +129,11 @@ const styles = StyleSheet.create({
         width: 200,
         marginBottom:20,
         display:"flex",
-        alignItems:"center",
+        textAlign:"center",
         justifyContent:"center",
         borderRadius:20
+    },
+    finished:{
+        paddingVertical:20
     }
 });

@@ -1,21 +1,59 @@
-import React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import React,{useState} from 'react';
+import { Text, KeyboardAvoidingView, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import {useDeckContext} from '../context/deckContext';    
+
 
 const NewCard = ({route,navigation}) => {
+
+    const {addCardToDeckContext} = useDeckContext();
+
+
     const {id} = route.params;
+
+    const [question,setQuestion] = useState("");
+    const [answer,setAnswer] = useState("");
+
+    const handleQuestions = (e)=>{
+        setQuestion(e)
+    }
+
+    const handleAnswer = (e)=>{
+        setAnswer(e)
+    }
+
+    const addToQuestions = ()=>{
+        addCardToDeckContext(id,{
+            question,
+            answer
+        })
+        Alert.alert("Success", `Question has been added to the ${id} Deck`);
+        setQuestion("");
+        setAnswer("");
+    }
+
     return (
-        <View style={styles.container}>
 
-            <Text>New Card for {id}</Text>
+            <KeyboardAvoidingView style={styles.container}>
+                
+                <TextInput
+                    style={styles.input}
+                    onChangeText={handleQuestions}
+                    value={question}
+                    placeholder="Enter question here"
+                />
 
-            <TouchableOpacity
-                onPress={()=>""}
-            >
-                <Text style={styles.btn}>
-                    Add Card
-                </Text>
-            </TouchableOpacity>
-        </View>
+                <TextInput
+                    style={styles.input}
+                    onChangeText={handleAnswer}
+                    value={answer}
+                    placeholder="Answer here"
+                />
+                <TouchableOpacity
+                    onPress={addToQuestions}
+                >
+                    <Text style={styles.btn}>Add Card</Text>
+                </TouchableOpacity>
+            </KeyboardAvoidingView>
     )
 }
 
@@ -31,7 +69,7 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
     },
     btn:{
-        backgroundColor:"lightblue",
+        backgroundColor:"green",
         color:"white",
         padding: 16,
         width: 200,
@@ -39,6 +77,17 @@ const styles = StyleSheet.create({
         display:"flex",
         alignItems:"center",
         justifyContent:"center",
-        borderRadius:20
+        borderRadius:20,
+        textAlign:"center"
+    },
+    input:{
+        width:"80%",
+        height:40,
+        borderWidth:1,
+        borderRadius:10,
+        paddingLeft:15,
+        paddingRight:15,
+        textTransform: "capitalize",
+        marginBottom:30
     }
 });
