@@ -44,7 +44,7 @@ export const setLocalNotification = async () => {
         .then((data) => {
             if (data === null) {
                 
-                let { status } = await Location.requestForegroundPermissionsAsync();
+                let { status } = await Location.requestBackgroundPermissionsAsync();
                 if (status === 'granted') {
                     Notifications.cancelAllScheduledNotificationsAsync();
 
