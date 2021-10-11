@@ -2,7 +2,7 @@ import React, { useEffect,useState, createContext, useContext } from 'react';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {initialState} from '../utils/helpers';
 
-const MOBILE_FLASHCARDS_DECK_KEY = "udacityMobileFitnessAppByTimi:key";
+const MOBILE_FLASHCARDS_DECK_KEY = "udacityMobileFitnessAppByTimi:newkey";
 
 export const DeckContext = createContext();
 
@@ -14,7 +14,6 @@ export const DeckContextProvider = ({children}) => {
     const [decks, setDecks] = useState({})
 
     useEffect(()=>{
-
         if(decks !== initialState){
             AsyncStorage.setItem(MOBILE_FLASHCARDS_DECK_KEY, JSON.stringify(decks))
         }
